@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Intelligent Mirror</title>
+
+    <link rel="stylesheet" href="styles.css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
+
+  </head>
+  <body>
+    <section class="main-wrapper">
+      <div class="left-wrapper">
+        <p class="date-wrapper"></p>
+        <div class="time-wrapper">
+          <div class="hour-minutes"></div>
+          <div class="seconds"></div>
+        </div>
+      </div>
+      <div class="right-wrapper">
+        <p class="city-name"></p>
+        <div class="weather-wrapper">
+          <div class="out-weather box-weather">
+            <img src="https://openweathermap.org/img/wn/04d@2x.png" alt="" class="weather-icon"/>
+            <div class="degree"></div>
+          </div>
+          <div class="in-weather box-weather">
+            <img src="images/icons/cottage_white_24dp.svg" alt="" class="home-img">
+            <div class="degree"></div>
+          </div>
+        </div>
+        <p class="pressure"></p>
+      </div>
+    </section>
+
+    <script src="index.js"></script>
+  </body>
+</html>
