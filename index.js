@@ -54,7 +54,7 @@ function setWeather(){
         let currentPressure = data.main.pressure;
         
 
-        cityName.innerHTML = `${currentCity}, ${currentCountry}`;
+        cityName.innerHTML = `${setCity}, ${currentCountry}`;
         pressureWrapper.innerHTML = `${currentPressure} hPa`;
         degreeWrapper.innerHTML = `${currentDegree}°`;
     });
@@ -64,7 +64,7 @@ function setWeather(){
         .then(data => {
             console.log(data);
         let degreeWrapper = document.querySelector('.in-weather .degree');
-        let currentInDegree = data;
+        let currentInDegree = Number(data).toFixed(1);
 
         degreeWrapper.innerHTML = `${currentInDegree}°`;
 
