@@ -19,7 +19,7 @@ body{
 
 .left-wrapper{
     /* border: 1px solid red; */
-    padding: 10vw;
+    padding: 6vw;
     font-weight: 300;
 }
 
@@ -36,9 +36,27 @@ body{
     bottom: -8px;
 }
 
+.news-list{
+    list-style-type: none;
+    margin-top: 200px;
+}
+
+.news-item{
+    margin: 20px 0;
+}
+
+.news-item h2{
+    font-size: 16px;
+    font-weight: 300;
+}
+
+.news-item .item-desc-hidden{
+    display: none;
+}
+
 .right-wrapper{
     /* border: 1px solid red; */
-    padding: 10vw;
+    padding: 6vw;
     font-weight: 300;
 }
 

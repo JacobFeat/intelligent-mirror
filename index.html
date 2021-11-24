@@ -14,7 +14,6 @@
       href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
       rel="stylesheet"
     />
-
   </head>
   <body>
     <section class="main-wrapper">
@@ -24,22 +23,39 @@
           <div class="hour-minutes"></div>
           <div class="seconds"></div>
         </div>
+        <ul class="news-list">
+        </ul>
       </div>
       <div class="right-wrapper">
         <p class="city-name"></p>
         <div class="weather-wrapper">
           <div class="out-weather box-weather">
-            <img src="https://openweathermap.org/img/wn/04d@2x.png" alt="" class="weather-icon"/>
+            <img
+              src="https://openweathermap.org/img/wn/04d@2x.png"
+              alt=""
+              class="weather-icon"
+            />
             <div class="degree"></div>
           </div>
           <div class="in-weather box-weather">
-            <img src="images/icons/cottage_white_24dp.svg" alt="" class="home-img">
+            <img
+              src="images/icons/cottage_white_24dp.svg"
+              alt=""
+              class="home-img"
+            />
             <div class="degree"></div>
           </div>
         </div>
         <p class="pressure"></p>
       </div>
     </section>
+
+    <audio id="audioContainer">
+      <source
+        src="The_Clash_-_Should_I_Stay or_Should_I_Go_SHORT.mp3"
+        type="audio/mpeg"
+      />
+    </audio>
 
     <script src="index.js"></script>
   </body>
