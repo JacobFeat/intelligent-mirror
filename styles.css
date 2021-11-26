@@ -36,9 +36,24 @@ body{
     bottom: -8px;
 }
 
+.news-picker{
+    margin: 200px 0 20px;
+    list-style-type: none;
+    display: flex;
+}
+
+.news-picker li{
+    padding-right: 10px;
+}
+
+.news-picker li a{
+    font-weight: 500;
+    color: #fff;
+    text-decoration: none;
+}
+
 .news-list{
     list-style-type: none;
-    margin-top: 200px;
 }
 
 .news-item{
