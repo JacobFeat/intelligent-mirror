@@ -11,13 +11,6 @@ let intervalTurnOn = setInterval(turnOn, 200000);
 let data = [];
 let dataArr = [];
 
-const rssBBCBusiness = "http://feeds.bbci.co.uk/news/business/rss.xml";
-const rssBBCWorld = "http://feeds.bbci.co.uk/news/world/rss.xml";
-const rssBBCPolitics = "http://feeds.bbci.co.uk/news/politics/rss.xml";
-const rssBBCHealth = "http://feeds.bbci.co.uk/news/health/rss.xml";
-const rssBBCTechnology = "http://feeds.bbci.co.uk/news/technology/rss.xml";
-const rssBBCSport = "http://feeds.bbci.co.uk/sport/football/rss.xml?edition=uk";
-
 const rss = {
   rssBBCBusiness: "http://feeds.bbci.co.uk/news/business/rss.xml",
   rssBBCWorld: "http://feeds.bbci.co.uk/news/world/rss.xml",
@@ -27,9 +20,14 @@ const rss = {
   rssBBCSport: "http://feeds.bbci.co.uk/sport/football/rss.xml?edition=uk",
 }
 
-function fillRSSVoiceCommand(obj) {
-  
-}
+// function fillRSSVoiceCommand(destinationObj) {
+//   for (const key in rss) {
+//     const shortenKey = key.slice(6);
+//     destinationObj[shortenKey] = () => fetchNews();
+//     console.log(destinationObj);
+//   }
+// }
+// // "World News": () => fetchNews(rss.rssBBCWorld),
 
 const newsPicker = document.querySelector(".news-picker");
 
@@ -55,6 +53,23 @@ degreeOutside.addEventListener('click', () => readWeather(degreeOutside));
 degreeInside.addEventListener('click', () => readWeather(degreeInside));
 pressure.addEventListener('click', () => readWeather(pressure));
 
+function newsChooser(){
+  const newsCategories = [];
+  for(let key in rss){
+    const newsCategory = key.slice(6);
+    newsCategories.push(newsCategory);
+  }
+  msg.text = `What kind of news do you want to listen to?`;
+  speechSynthesis.cancel();
+  speechSynthesis.speak(msg);
+  setTimeout(()=> {
+    msg.text = '';
+    newsCategories.forEach(news => msg.text += ',' + news + "?");
+    speechSynthesis.cancel();
+    speechSynthesis.speak(msg);
+  },3500)
+}
+
 
 function readWeather(degree){
   if(degree === degreeInside){
@@ -75,10 +90,8 @@ function justRead(item){
 }
 
 if (annyang) {
+  
   const commands = {
-    // "What is your name": myname,
-    "News": () => fetchNews(rssBBCBusiness),
-    "World News": () => fetchNews(rssBBCWorld),
     "First": () => showCertainNews(0),
     "One": () => showCertainNews(0),
     "Second": () => showCertainNews(1),
@@ -87,7 +100,16 @@ if (annyang) {
     "Fifth": () => showCertainNews(4),
     "The weather": () => readWeather(degreeOutside),
     "Temperature": () => readWeather(degreeInside),
+    "News": () => fetchNews(newsChooser),
+    "Business": () => fetchNews(rss.rssBBCBusiness),
+    "World": () => fetchNews(rss.rssBBCWorld),
+    "Politics": () => fetchNews(rss.rssBBCPolitics),
+    "Health": () => fetchNews(rss.rssBBCHealth),
+    "Technology": () => fetchNews(rss.rssBBCTechnology),
+    "Sport": () => fetchNews(rss.rssBBCSport),
   };
+  // fillRSSVoiceCommand(commands);
+
 
   function myname() {
     console.log("My name is Jakub!");
