@@ -108,30 +108,37 @@ body{
     padding: 14px;
 }
 
-.hi-suczki{
-    width: 100%;
+.calendar{
     position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    color: red;
-    font-size: 100px;
-    text-align: center;
+    bottom: 100px;
+    right: 100px;
+    width: 260px;
 }
 
-.ok-lets-go{
-    width: 150%;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(30%, -50%);
-    color: red;
-    font-size: 130px;
-    text-align: center;
-    overflow: hidden;
+#content{
+    font-family: 'Roboto', sans-serif;
 }
 
-.ok-lets-go-active{
-    transition: transform 3.5s;
-    transform: translate(-200%, -50%);
+.event-container{
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.calendar__title{
+    border-bottom: 1px solid rgb(190, 190, 190);
+    color: rgb(190, 190, 190);
+    font-weight: 300;
+    font-size: 16px;
+}
+
+#content .calendar__event {
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.calendar__date{
+    color: rgb(190, 190, 190);
+    font-weight: 300;
 }
