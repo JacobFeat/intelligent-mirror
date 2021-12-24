@@ -29,10 +29,6 @@ const rss = {
 // }
 // // "World News": () => fetchNews(rss.rssBBCWorld),
 
-const newsPicker = document.querySelector(".news-picker");
-
-newsPicker.addEventListener("click", chooseNews);
-
 const msg = new SpeechSynthesisUtterance();
 let voices = [];
 
@@ -53,6 +49,20 @@ degreeOutside.addEventListener('click', () => readWeather(degreeOutside));
 degreeInside.addEventListener('click', () => readWeather(degreeInside));
 pressure.addEventListener('click', () => readWeather(pressure));
 
+function readCalendarEvents(){
+  const events = document.querySelectorAll('.event-container');
+  events.forEach(event => {
+    msg.text = event.innerText;
+  })
+  speechSynthesis.cancel();
+  speechSynthesis.speak(msg);
+  console.log(msg.text);
+}
+
+// setTimeout(() => {
+//   readCalendarEvents();
+// }, 2000)
+
 function newsChooser(){
   const newsCategories = [];
   for(let key in rss){
@@ -64,7 +74,7 @@ function newsChooser(){
   speechSynthesis.speak(msg);
   setTimeout(()=> {
     msg.text = '';
-    newsCategories.forEach(news => msg.text += ',' + news + "?");
+    newsCategories.forEach(news => msg.text += news + ", ");
     speechSynthesis.cancel();
     speechSynthesis.speak(msg);
   },3500)
@@ -84,6 +94,7 @@ function readWeather(degree){
 }
 
 function justRead(item){
+  msg.text = ' ';
   msg.text = item;
   speechSynthesis.cancel();
   speechSynthesis.speak(msg);
@@ -92,21 +103,23 @@ function justRead(item){
 if (annyang) {
   
   const commands = {
-    "First": () => showCertainNews(0),
-    "One": () => showCertainNews(0),
-    "Second": () => showCertainNews(1),
-    "Third": () => showCertainNews(2),
-    "Fourth": () => showCertainNews(3),
-    "Fifth": () => showCertainNews(4),
     "The weather": () => readWeather(degreeOutside),
     "Temperature": () => readWeather(degreeInside),
-    "News": () => fetchNews(newsChooser),
+    "News": newsChooser,
     "Business": () => fetchNews(rss.rssBBCBusiness),
     "World": () => fetchNews(rss.rssBBCWorld),
     "Politics": () => fetchNews(rss.rssBBCPolitics),
     "Health": () => fetchNews(rss.rssBBCHealth),
     "Technology": () => fetchNews(rss.rssBBCTechnology),
     "Sport": () => fetchNews(rss.rssBBCSport),
+    "First": () => showCertainNews(0),
+    "First news": () => showCertainNews(0),
+    "One": () => showCertainNews(0),
+    "Second": () => showCertainNews(1),
+    "Second news": () => showCertainNews(1),
+    "Third news": () => showCertainNews(2),
+    "Fourth news": () => showCertainNews(3),
+    "Fifth news": () => showCertainNews(4),
   };
   // fillRSSVoiceCommand(commands);
 
@@ -122,25 +135,24 @@ if (annyang) {
   annyang.start();
 }
 
+const calendarTitle = document.querySelector('.calendar__title');
+calendarTitle.addEventListener('click', readCalendar);
+
+
+function readCalendar(){
+  const calendarEvents = document.querySelectorAll('.event-container');
+  speechSynthesis.cancel();
+  msg.text = ' ';
+  calendarEvents.forEach(event => {
+    msg.text += ',' + event.textContent + ",";
+  })
+  speechSynthesis.speak(msg);
+}
+
 function showCertainNews(n){
   if(htmlNewsList.childElementCount){
     htmlNewsList.innerHTML = dataArr[n].description;
     justRead(dataArr[n].description);
-  }
-}
-
-function chooseNews(e) {
-  e.preventDefault();
-  const choosenType = e.target.innerText;
-  switch (choosenType) {
-    case "Business":
-      fetchNews(rssBBCBusiness);
-      break;
-    case "World":
-      fetchNews(rssBBCWorld);
-      break;
-    default:
-      return null;
   }
 }
 
@@ -165,11 +177,6 @@ function fetchNews(url) {
       speechSynthesis.cancel();
     });
 }
-
-
-// fetch("/sample-api")
-  // .then(data => data)
-  // .then(data => console.log(data))
 
 const htmlNewsList = document.querySelector(".news-list");
 let isExpanded = false;
