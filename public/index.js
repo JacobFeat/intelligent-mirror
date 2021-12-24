@@ -1,3 +1,7 @@
+// import textsSpeech from "./textsSpeech.mjs";
+
+// textsSpeech();
+
 const hourMinutesWrapper = document.querySelector(".hour-minutes");
 const secondsWrapper = document.querySelector(".seconds");
 const dateWrapper = document.querySelector(".date-wrapper");
@@ -100,40 +104,40 @@ function justRead(item){
   speechSynthesis.speak(msg);
 }
 
-if (annyang) {
+// if (annyang) {
   
-  const commands = {
-    "The weather": () => readWeather(degreeOutside),
-    "Temperature": () => readWeather(degreeInside),
-    "News": newsChooser,
-    "Business": () => fetchNews(rss.rssBBCBusiness),
-    "World": () => fetchNews(rss.rssBBCWorld),
-    "Politics": () => fetchNews(rss.rssBBCPolitics),
-    "Health": () => fetchNews(rss.rssBBCHealth),
-    "Technology": () => fetchNews(rss.rssBBCTechnology),
-    "Sport": () => fetchNews(rss.rssBBCSport),
-    "First": () => showCertainNews(0),
-    "First news": () => showCertainNews(0),
-    "One": () => showCertainNews(0),
-    "Second": () => showCertainNews(1),
-    "Second news": () => showCertainNews(1),
-    "Third news": () => showCertainNews(2),
-    "Fourth news": () => showCertainNews(3),
-    "Fifth news": () => showCertainNews(4),
-  };
-  // fillRSSVoiceCommand(commands);
+//   const commands = {
+//     "The weather": () => readWeather(degreeOutside),
+//     "Temperature": () => readWeather(degreeInside),
+//     "News": newsChooser,
+//     "Business": () => fetchNews(rss.rssBBCBusiness),
+//     "World": () => fetchNews(rss.rssBBCWorld),
+//     "Politics": () => fetchNews(rss.rssBBCPolitics),
+//     "Health": () => fetchNews(rss.rssBBCHealth),
+//     "Technology": () => fetchNews(rss.rssBBCTechnology),
+//     "Sport": () => fetchNews(rss.rssBBCSport),
+//     "First": () => showCertainNews(0),
+//     "First news": () => showCertainNews(0),
+//     "One": () => showCertainNews(0),
+//     "Second": () => showCertainNews(1),
+//     "Second news": () => showCertainNews(1),
+//     "Third news": () => showCertainNews(2),
+//     "Fourth news": () => showCertainNews(3),
+//     "Fifth news": () => showCertainNews(4),
+//   };
+//   // fillRSSVoiceCommand(commands);
 
 
-  function myname() {
-    console.log("My name is Jakub!");
-  }
+//   function myname() {
+//     console.log("My name is Jakub!");
+//   }
 
-  // Add Commands
-  annyang.addCommands(commands);
+//   // Add Commands
+//   annyang.addCommands(commands);
 
-  // Start listening
-  annyang.start();
-}
+//   // Start listening
+//   annyang.start();
+// }
 
 const calendarTitle = document.querySelector('.calendar__title');
 calendarTitle.addEventListener('click', readCalendar);

@@ -24,9 +24,6 @@
           <div class="seconds"></div>
         </div>
         <div class="news-container">
-        <h2 class="news-picker">
-          News
-        </h2>
         <ul class="news-list"></ul>
       </div>
       </div>
@@ -61,11 +58,16 @@
         <h2 class="calendar__title">CALENDAR</h2>
         <pre id="content" style="white-space: pre-wrap"></pre>
       </div>
+      <div class="voice__container">
+        <div class="voice__container--texts">
+          <p class="text"></p>
+        </div>
+      </div>
     </section>
 
-
-    <script src="voice.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.6.0/annyang.min.js"></script>
+    <script src="textsSpeech.js"></script>
+    <script src="calendar.js"></script>
+    <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.6.0/annyang.min.js"></script> -->
     <script src="index.js"></script>
     <script
       async
@@ -73,6 +75,6 @@
       src="https://apis.google.com/js/api.js"
       onload="this.onload=function(){};handleClientLoad()"
       onreadystatechange="if (this.readyState === 'complete') this.onload()"
-    ></script>
-  </body>
+      ></script>
+    </body>
 </html>
