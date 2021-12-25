@@ -1,3 +1,5 @@
+// voice recognition -------------------- 
+
 const texts = document.querySelector(".voice__container--texts");
 
 window.SpeechRecognition =
@@ -5,7 +7,7 @@ window.SpeechRecognition =
 
 const recognition = new window.SpeechRecognition();
 recognition.interimResults = true;
-recognition.lang = "en-US";
+// recognition.lang = "en-US";
 const text = document.querySelector(".text");
 let p = document.createElement("p");
 
@@ -34,6 +36,26 @@ const newsTargetWords = {
     words: ["kultura", "culture"],
     fnc: () => fetchNews(rss.rssBBCKultura),
   },
+  firstNews: {
+    words: ['pierwsza wiadomość', 'pierwsza', 'pierwszą', 'first'],
+    fnc: () => showCertainNews(0),
+  },  
+  secondNews: {
+    words: ['druga wiadomość', 'druga', 'drugą', 'second'],
+    fnc: () => showCertainNews(1),
+  },  
+  thirdNews: {
+    words: ['trzecią wiadomość', 'trzecia', 'trzecią', 'third'],
+    fnc: () => showCertainNews(2),
+  },  
+  fourthNews: {
+    words: ['czwarta wiadomość', 'czwarta', 'czwartą', 'fourth'],
+    fnc: () => showCertainNews(3),
+  },  
+  fifthNews: {
+    words: ['piąta wiadomość', 'piąta', 'piątą', 'fifth'],
+    fnc: () => showCertainNews(4),
+  },
 };
 
 let prevWord = '';
@@ -42,14 +64,11 @@ recognition.addEventListener("result", (e) => {
   .map((result) => result[0].transcript)
   .join("");
 
-  prevWord = htmlText;
-  // if(prevWord === htmlText){
-  //   return;
-  // }
-
+  if(prevWord === htmlText) return;  
+  
   p.innerText = htmlText;
   texts.appendChild(p);
-
+  
   console.log(htmlText);
   for (let category in newsTargetWords) {
     newsTargetWords[category].words.forEach((word) => {
@@ -58,7 +77,8 @@ recognition.addEventListener("result", (e) => {
       }
     });
   }
-
+  
+  prevWord = htmlText;
   // console.log(htmlText);
   // if(e.results[0].isFinal){
   //     p = document.createElement('p');
@@ -115,11 +135,11 @@ let voices = [];
 
 function populateVoices() {
   voices = this.getVoices().filter((item) => {
-    // return item.lang.includes("pl");
-    return item.lang.includes("en");
+    return item.lang.includes("pl");
+    // return item.lang.includes("en");
   });
   // console.log(voices);
-  msg.voice = voices[0];
+  msg.voice = voices[1];
 }
 
 speechSynthesis.addEventListener("voiceschanged", populateVoices);
@@ -148,8 +168,8 @@ function readCalendarEvents() {
 function newsChooser() {
   msg.text = '';
   console.log('work');
-  msg.text = `What kind of news do you want to listen to?`;
-  // msg.text = "Jaką kategorię wiadomości chcesz usłyszeć?";
+  // msg.text = `What kind of news do you want to listen to?`;
+  msg.text = "Jaką kategorię wiadomości chcesz usłyszeć?";
   speechSynthesis.cancel();
   speechSynthesis.speak(msg);
 
@@ -168,11 +188,14 @@ function newsChooser() {
 
 function readWeather(degree) {
   if (degree === degreeInside) {
-    msg.text = `There are ${degree.innerText} in your room.`;
+    msg.text = `W twoim pokoju jest ${degree.innerText}.`;
+    // msg.text = `There are ${degree.innerText} in your room.`;
   } else if (degree === degreeOutside) {
-    msg.text = `There are ${degree.innerText} outside`;
+    msg.text = `Na zewnątrz jest ${degree.innerText}.`;
+    // msg.text = `There are ${degree.innerText} outside`;
   } else if (degree === pressure) {
-    msg.text = `There are ${degree.innerText}`;
+    msg.text = `Ciśnienie wynosi ${degree.innerText}`;
+    // msg.text = `There are ${degree.innerText}`;
   }
   speechSynthesis.cancel();
   speechSynthesis.speak(msg);
