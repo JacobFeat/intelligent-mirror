@@ -12,6 +12,10 @@ const text = document.querySelector(".text");
 let p = document.createElement("p");
 
 const newsTargetWords = {
+  return: {
+    words: ["wróć", 'powrót'],
+    fnc: toggleNews
+  },
   news: {
     words: ["wiadomości", "news"],
     fnc: newsChooser,
@@ -35,6 +39,10 @@ const newsTargetWords = {
   culture: {
     words: ["kultura", "culture"],
     fnc: () => fetchNews(rss.rssBBCKultura),
+  },  
+  sport: {
+    words: ["sport", "sporty", 'sports'],
+    fnc: () => fetchNews(rss.rssBBCSport),
   },
   firstNews: {
     words: ['pierwsza wiadomość', 'pierwsza', 'pierwszą', 'first'],
@@ -45,7 +53,7 @@ const newsTargetWords = {
     fnc: () => showCertainNews(1),
   },  
   thirdNews: {
-    words: ['trzecią wiadomość', 'trzecia', 'trzecią', 'third'],
+    words: ['trzecia wiadomość', 'trzecia', 'trzecią', 'third'],
     fnc: () => showCertainNews(2),
   },  
   fourthNews: {
@@ -56,6 +64,34 @@ const newsTargetWords = {
     words: ['piąta wiadomość', 'piąta', 'piątą', 'fifth'],
     fnc: () => showCertainNews(4),
   },
+  weatherInside: {
+    words: ['w domu', 'w środku', 'w pokoju', 'w mieszkaniu'],
+    fnc: () => readWeather(degreeInside)
+  },
+  weatherOutside: {
+    words: ['temperatura na polu', 'temperatura na zewnątrz' , 'ile jest stopni na polu', 'ile jest stopni na zewnątrz', 'na polu', 'na zewnątrz', 'pogoda'],
+    fnc: () => readWeather(degreeOutside)
+  },
+  weatherChoice: {
+    words: ['ile jest stopni', 'jaka jest temperatura', 'temperatura', 'stopni'],
+    fnc: () => justRead("Na zewnątrz czy w domu?")
+  },
+  pressure: {
+    words: ['ciśnienie'],
+    fnc: () => readWeather(pressure)
+  },
+  whoIsThePrettiest: {
+    words: ['najpiękniejszy', 'najpiękniejsza'],
+    fnc: () => justRead("chyba Jakub Kita"),
+  },
+  calendar: {
+    words: ['kalendarz', 'wydarzenia', 'zaplanowane'],
+    fnc: readCalendarEvents,
+  },
+  time: {
+    words: ['godzina', 'time'],
+    fnc: () => justRead(hourMinutesWrapper.textContent)
+  }
 };
 
 let prevWord = '';
@@ -64,6 +100,7 @@ recognition.addEventListener("result", (e) => {
   .map((result) => result[0].transcript)
   .join("");
 
+  //protect from duplicate 
   if(prevWord === htmlText) return;  
   
   p.innerText = htmlText;
@@ -79,10 +116,6 @@ recognition.addEventListener("result", (e) => {
   }
   
   prevWord = htmlText;
-  // console.log(htmlText);
-  // if(e.results[0].isFinal){
-  //     p = document.createElement('p');
-  // }
 });
 
 recognition.addEventListener("end", (e) => {
@@ -121,15 +154,6 @@ const rss = {
 //   rssBBCSport: "http://feeds.bbci.co.uk/sport/football/rss.xml?edition=uk",
 // }
 
-// function fillRSSVoiceCommand(destinationObj) {
-//   for (const key in rss) {
-//     const shortenKey = key.slice(6);
-//     destinationObj[shortenKey] = () => fetchNews();
-//     console.log(destinationObj);
-//   }
-// }
-// // "World News": () => fetchNews(rss.rssBBCWorld),
-
 const msg = new SpeechSynthesisUtterance();
 let voices = [];
 
@@ -147,23 +171,17 @@ speechSynthesis.addEventListener("voiceschanged", populateVoices);
 let degreeOutside = document.querySelectorAll(".degree")[0];
 let degreeInside = document.querySelectorAll(".degree")[1];
 let pressure = document.querySelector(".pressure");
-degreeOutside.addEventListener("click", () => readWeather(degreeOutside));
-degreeInside.addEventListener("click", () => readWeather(degreeInside));
-pressure.addEventListener("click", () => readWeather(pressure));
 
 function readCalendarEvents() {
+  msg.text = '';
+  speechSynthesis.cancel();
   const events = document.querySelectorAll(".event-container");
   events.forEach((event) => {
-    msg.text = event.innerText;
+    msg.text += `${event.childNodes[0].textContent} ${event.childNodes[1].textContent},\n`;
   });
-  speechSynthesis.cancel();
   speechSynthesis.speak(msg);
   console.log(msg.text);
 }
-
-// setTimeout(() => {
-//   readCalendarEvents();
-// }, 2000)
 
 function newsChooser() {
   msg.text = '';
@@ -207,43 +225,6 @@ function justRead(item) {
   speechSynthesis.cancel();
   speechSynthesis.speak(msg);
 }
-
-// if (annyang) {
-
-//   const commands = {
-//     "The weather": () => readWeather(degreeOutside),
-//     "Temperature": () => readWeather(degreeInside),
-//     "News": newsChooser,
-//     "Business": () => fetchNews(rss.rssBBCBusiness),
-//     "World": () => fetchNews(rss.rssBBCWorld),
-//     "Politics": () => fetchNews(rss.rssBBCPolitics),
-//     "Health": () => fetchNews(rss.rssBBCHealth),
-//     "Technology": () => fetchNews(rss.rssBBCTechnology),
-//     "Sport": () => fetchNews(rss.rssBBCSport),
-//     "First": () => showCertainNews(0),
-//     "First news": () => showCertainNews(0),
-//     "One": () => showCertainNews(0),
-//     "Second": () => showCertainNews(1),
-//     "Second news": () => showCertainNews(1),
-//     "Third news": () => showCertainNews(2),
-//     "Fourth news": () => showCertainNews(3),
-//     "Fifth news": () => showCertainNews(4),
-//   };
-//   // fillRSSVoiceCommand(commands);
-
-//   function myname() {
-//     console.log("My name is Jakub!");
-//   }
-
-//   // Add Commands
-//   annyang.addCommands(commands);
-
-//   // Start listening
-//   annyang.start();
-// }
-
-const calendarTitle = document.querySelector(".calendar__title");
-calendarTitle.addEventListener("click", readCalendar);
 
 function readCalendar() {
   const calendarEvents = document.querySelectorAll(".event-container");
@@ -305,26 +286,17 @@ function addNews(arr, amount = 5) {
 }
 
 function toggleNews(e) {
-  if (e.target.parentElement.classList.contains("news-item")) {
-    htmlNewsList.innerHTML = e.target.parentElement.children[1].innerText;
-    justRead(htmlNewsList.innerHTML);
-    isExpanded = true;
-  }
+  // if (e.target.parentElement.classList.contains("news-item")) {
+  //   htmlNewsList.innerHTML = e.target.parentElement.children[1].innerText;
+  //   justRead(htmlNewsList.innerHTML);
+  //   isExpanded = true;
+  // }
 
-  if (isExpanded && e.target.classList.contains("news-list")) {
+  // if (isExpanded && e.target.classList.contains("news-list")) {
     addNews(dataArr);
     speechSynthesis.cancel();
-  }
+  // }
 }
-
-function dateDiff() {
-  // let date = new Date();
-  // let day = date.getDate();
-  // let year = date.getFullYear();
-  // let monthNumber = date.getMonth();
-  // console.log(`${year}-${monthNumber+1}-${day}`);
-}
-dateDiff();
 
 function setDate() {
   let date = new Date();
@@ -335,7 +307,6 @@ function setDate() {
   let day = date.getDate();
   let year = date.getFullYear();
   let monthNumber = date.getMonth();
-  // console.log(`${year}-${monthNumber+1}-${day}`);
 
   if (hour < 10) {
     hour = "0" + hour;
@@ -347,11 +318,9 @@ function setDate() {
     seconds = "0" + seconds;
   }
 
-  //   if (minutes > 0) {
-  let weekday = date.toLocaleString("en-GB", { weekday: "long" });
-  let month = date.toLocaleString("en-GB", { month: "long" });
+  let weekday = date.toLocaleString("default", { weekday: "long" });
+  let month = date.toLocaleString("default", { month: "long" });
   dateWrapper.innerHTML = `${weekday}, ${day} ${month} ${year}`;
-  //   }
 
   hourMinutesWrapper.innerHTML = `${hour}:${minutes}`;
   secondsWrapper.innerHTML = `${seconds}`;
@@ -364,11 +333,10 @@ function setWeather() {
     `https://api.openweathermap.org/data/2.5/weather?q=${setCity}&appid=${API_KEY_WEATHER}`
   )
     .then((res) => res.json())
-    .then(({ name, sys: { country }, main: { temp, pressure } }) => {
+  .then(({ name, sys: { country }, main: { temp, pressure } }) => {
       let cityName = document.querySelector(".city-name");
       let degreeWrapper = document.querySelector(".out-weather .degree");
       let pressureWrapper = document.querySelector(".pressure");
-
       let currentCity = name;
       let currentCountry = country;
       let currentDegree = (temp - 273.15).toFixed(1);

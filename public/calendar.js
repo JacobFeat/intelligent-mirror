@@ -142,21 +142,36 @@ function listUpcomingEvents() {
             const monthToEnd = 12 - monthNumber;
             const monthDiff = monthToEnd + eventMonth;
             if(monthDiff < 2){
-              daysToOccur = `in ${31 - day + eventDay} days`;
+              daysToOccur = `za ${31 - day + eventDay} dni`;
             } else {
-              daysToOccur = `in ${monthDiff} months`;
-            }
+              daysToOccur = `za ${monthDiff} miesiące`;
+            }  
+            //           if(monthDiff < 2){
+            //   daysToOccur = `in ${31 - day + eventDay} days`;
+            // } else {
+            //   daysToOccur = `in ${monthDiff} months`;
+            // }
           }
           else if(eventMonth > monthNumber){
-            daysToOccur = `in ${monthDiff} months`;
-          }
+            daysToOccur = `za ${monthDiff} miesiące`;
+          }          
+          // else if(eventMonth > monthNumber){
+          //   daysToOccur = `in ${monthDiff} months`;
+          // }
           else{
             if(eventDay - day === 1){
-              daysToOccur = 'Tomorrow'
+              daysToOccur = 'Jutro'
             } else {
-              daysToOccur = `in ${eventDay - day} days`;
+              daysToOccur = `za ${eventDay - day} dni`;
             }
-          }
+          }          
+          // else{
+          //   if(eventDay - day === 1){
+          //     daysToOccur = 'Tomorrow'
+          //   } else {
+          //     daysToOccur = `in ${eventDay - day} days`;
+          //   }
+          // }
 
           if (!when) {
             when = event.start.date;
