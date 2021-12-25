@@ -41,7 +41,7 @@ body{
     position: absolute;
     /* right: 160px; */
     left: 6vw;
-    top: 300px;
+    top: 420px;
 }
 
 .news-picker{
@@ -153,14 +153,14 @@ body{
 
 .voice__container{
     position: absolute;
-    top: 90%;
+    top: 95%;
     left: 50%;
     transform: translate(-50%, -50%);
     /* background-color: #fff; */
     /* color: black; */
     text-align: center;
     width: 400px;
-    height: 120px;
+    /* height: 120px; */
 }
 
 .voice__container--texts p{

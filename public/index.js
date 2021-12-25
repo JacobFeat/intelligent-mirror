@@ -1,6 +1,75 @@
-// import textsSpeech from "./textsSpeech.mjs";
+const texts = document.querySelector(".voice__container--texts");
 
-// textsSpeech();
+window.SpeechRecognition =
+  window.SpeechRecognition || window.webkitSpeechRecognition;
+
+const recognition = new window.SpeechRecognition();
+recognition.interimResults = true;
+recognition.lang = "en-US";
+const text = document.querySelector(".text");
+let p = document.createElement("p");
+
+const newsTargetWords = {
+  news: {
+    words: ["wiadomości", "news"],
+    fnc: newsChooser,
+  },
+  business: {
+    words: ["biznes", "business"],
+    fnc: () => fetchNews(rss.rssBBCBiznes),
+  },
+  world: {
+    words: ["świat", "world"],
+    fnc: () => fetchNews(rss.rssBBCŚwiat),
+  },
+  poland: {
+    words: ["polska", "poland", "Polska", "Poland"],
+    fnc: () => fetchNews(rss.rssBBCPolska),
+  },
+  tech: {
+    words: ["technolog", "technology", "tech"],
+    fnc: () => fetchNews(rss.rssBBCTechnologia),
+  },  
+  culture: {
+    words: ["kultura", "culture"],
+    fnc: () => fetchNews(rss.rssBBCKultura),
+  },
+};
+
+let prevWord = '';
+recognition.addEventListener("result", (e) => {
+  const htmlText = Array.from(e.results)
+  .map((result) => result[0].transcript)
+  .join("");
+
+  prevWord = htmlText;
+  // if(prevWord === htmlText){
+  //   return;
+  // }
+
+  p.innerText = htmlText;
+  texts.appendChild(p);
+
+  console.log(htmlText);
+  for (let category in newsTargetWords) {
+    newsTargetWords[category].words.forEach((word) => {
+      if (htmlText.toLowerCase().includes(word)) {
+        newsTargetWords[category].fnc();
+      }
+    });
+  }
+
+  // console.log(htmlText);
+  // if(e.results[0].isFinal){
+  //     p = document.createElement('p');
+  // }
+});
+
+recognition.addEventListener("end", (e) => {
+  recognition.start();
+});
+
+recognition.start();
 
 const hourMinutesWrapper = document.querySelector(".hour-minutes");
 const secondsWrapper = document.querySelector(".seconds");
@@ -16,13 +85,21 @@ let data = [];
 let dataArr = [];
 
 const rss = {
-  rssBBCBusiness: "http://feeds.bbci.co.uk/news/business/rss.xml",
-  rssBBCWorld: "http://feeds.bbci.co.uk/news/world/rss.xml",
-  rssBBCPolitics: "http://feeds.bbci.co.uk/news/politics/rss.xml",
-  rssBBCHealth: "http://feeds.bbci.co.uk/news/health/rss.xml",
-  rssBBCTechnology: "http://feeds.bbci.co.uk/news/technology/rss.xml",
-  rssBBCSport: "http://feeds.bbci.co.uk/sport/football/rss.xml?edition=uk",
-}
+  rssBBCPolska: "https://www.polsatnews.pl/rss/polska.xml",
+  rssBBCŚwiat: "https://www.polsatnews.pl/rss/swiat.xml",
+  rssBBCBiznes: "https://www.polsatnews.pl/rss/biznes.xml",
+  rssBBCTechnologia: "https://www.polsatnews.pl/rss/technologie.xml",
+  rssBBCKultura: "https://www.polsatnews.pl/rss/kultura.xml",
+  rssBBCSport: "https://www.polsatnews.pl/rss/sport.xml",
+};
+// const rss = {
+//   rssBBCBusiness: "http://feeds.bbci.co.uk/news/business/rss.xml",
+//   rssBBCWorld: "http://feeds.bbci.co.uk/news/world/rss.xml",
+//   rssBBCPolitics: "http://feeds.bbci.co.uk/news/politics/rss.xml",
+//   rssBBCHealth: "http://feeds.bbci.co.uk/news/health/rss.xml",
+//   rssBBCTechnology: "http://feeds.bbci.co.uk/news/technology/rss.xml",
+//   rssBBCSport: "http://feeds.bbci.co.uk/sport/football/rss.xml?edition=uk",
+// }
 
 // function fillRSSVoiceCommand(destinationObj) {
 //   for (const key in rss) {
@@ -36,28 +113,29 @@ const rss = {
 const msg = new SpeechSynthesisUtterance();
 let voices = [];
 
-function populateVoices(){
-  voices = this.getVoices().filter(item => {
+function populateVoices() {
+  voices = this.getVoices().filter((item) => {
+    // return item.lang.includes("pl");
     return item.lang.includes("en");
   });
   // console.log(voices);
-  msg.voice = voices[5]; 
+  msg.voice = voices[0];
 }
 
-speechSynthesis.addEventListener('voiceschanged', populateVoices);
+speechSynthesis.addEventListener("voiceschanged", populateVoices);
 
-let degreeOutside = document.querySelectorAll('.degree')[0];
-let degreeInside = document.querySelectorAll('.degree')[1];
-let pressure = document.querySelector('.pressure');
-degreeOutside.addEventListener('click', () => readWeather(degreeOutside));
-degreeInside.addEventListener('click', () => readWeather(degreeInside));
-pressure.addEventListener('click', () => readWeather(pressure));
+let degreeOutside = document.querySelectorAll(".degree")[0];
+let degreeInside = document.querySelectorAll(".degree")[1];
+let pressure = document.querySelector(".pressure");
+degreeOutside.addEventListener("click", () => readWeather(degreeOutside));
+degreeInside.addEventListener("click", () => readWeather(degreeInside));
+pressure.addEventListener("click", () => readWeather(pressure));
 
-function readCalendarEvents(){
-  const events = document.querySelectorAll('.event-container');
-  events.forEach(event => {
+function readCalendarEvents() {
+  const events = document.querySelectorAll(".event-container");
+  events.forEach((event) => {
     msg.text = event.innerText;
-  })
+  });
   speechSynthesis.cancel();
   speechSynthesis.speak(msg);
   console.log(msg.text);
@@ -67,45 +145,48 @@ function readCalendarEvents(){
 //   readCalendarEvents();
 // }, 2000)
 
-function newsChooser(){
+function newsChooser() {
+  msg.text = '';
+  console.log('work');
+  msg.text = `What kind of news do you want to listen to?`;
+  // msg.text = "Jaką kategorię wiadomości chcesz usłyszeć?";
+  speechSynthesis.cancel();
+  speechSynthesis.speak(msg);
+
   const newsCategories = [];
-  for(let key in rss){
+  for (let key in rss) {
     const newsCategory = key.slice(6);
     newsCategories.push(newsCategory);
   }
-  msg.text = `What kind of news do you want to listen to?`;
-  speechSynthesis.cancel();
-  speechSynthesis.speak(msg);
-  setTimeout(()=> {
-    msg.text = '';
-    newsCategories.forEach(news => msg.text += news + ", ");
+  setTimeout(() => {
+    msg.text = "";
+    newsCategories.forEach((news) => (msg.text += news + ", "));
     speechSynthesis.cancel();
     speechSynthesis.speak(msg);
-  },3500)
+  }, 3500);
 }
 
-
-function readWeather(degree){
-  if(degree === degreeInside){
+function readWeather(degree) {
+  if (degree === degreeInside) {
     msg.text = `There are ${degree.innerText} in your room.`;
-  } else if(degree === degreeOutside){
+  } else if (degree === degreeOutside) {
     msg.text = `There are ${degree.innerText} outside`;
-  } else if(degree === pressure){
+  } else if (degree === pressure) {
     msg.text = `There are ${degree.innerText}`;
   }
   speechSynthesis.cancel();
   speechSynthesis.speak(msg);
 }
 
-function justRead(item){
-  msg.text = ' ';
+function justRead(item) {
+  msg.text = " ";
   msg.text = item;
   speechSynthesis.cancel();
   speechSynthesis.speak(msg);
 }
 
 // if (annyang) {
-  
+
 //   const commands = {
 //     "The weather": () => readWeather(degreeOutside),
 //     "Temperature": () => readWeather(degreeInside),
@@ -127,7 +208,6 @@ function justRead(item){
 //   };
 //   // fillRSSVoiceCommand(commands);
 
-
 //   function myname() {
 //     console.log("My name is Jakub!");
 //   }
@@ -139,22 +219,21 @@ function justRead(item){
 //   annyang.start();
 // }
 
-const calendarTitle = document.querySelector('.calendar__title');
-calendarTitle.addEventListener('click', readCalendar);
+const calendarTitle = document.querySelector(".calendar__title");
+calendarTitle.addEventListener("click", readCalendar);
 
-
-function readCalendar(){
-  const calendarEvents = document.querySelectorAll('.event-container');
+function readCalendar() {
+  const calendarEvents = document.querySelectorAll(".event-container");
   speechSynthesis.cancel();
-  msg.text = ' ';
-  calendarEvents.forEach(event => {
-    msg.text += ',' + event.textContent + ",";
-  })
+  msg.text = " ";
+  calendarEvents.forEach((event) => {
+    msg.text += "," + event.textContent + ",";
+  });
   speechSynthesis.speak(msg);
 }
 
-function showCertainNews(n){
-  if(htmlNewsList.childElementCount){
+function showCertainNews(n) {
+  if (htmlNewsList.childElementCount) {
     htmlNewsList.innerHTML = dataArr[n].description;
     justRead(dataArr[n].description);
   }
@@ -171,7 +250,10 @@ function fetchNews(url) {
         const title = item.querySelector("title").innerText;
         const preparedTitle = title.slice(9, title.length - 3) + ".";
         const description = item.querySelector("description").innerHTML;
-        const preparedDescription = description.slice(11,description.length - 5);
+        const preparedDescription = description.slice(
+          11,
+          description.length - 5
+        );
         return {
           title: preparedTitle,
           description: preparedDescription,
@@ -212,7 +294,7 @@ function toggleNews(e) {
   }
 }
 
-function dateDiff(){
+function dateDiff() {
   // let date = new Date();
   // let day = date.getDate();
   // let year = date.getFullYear();
@@ -243,8 +325,8 @@ function setDate() {
   }
 
   //   if (minutes > 0) {
-  let weekday = date.toLocaleString('en-GB', { weekday: "long" });
-  let month = date.toLocaleString('en-GB', { month: "long" });
+  let weekday = date.toLocaleString("en-GB", { weekday: "long" });
+  let month = date.toLocaleString("en-GB", { month: "long" });
   dateWrapper.innerHTML = `${weekday}, ${day} ${month} ${year}`;
   //   }
 
@@ -296,6 +378,3 @@ function turnOn() {
       }
     });
 }
-
-
-     
