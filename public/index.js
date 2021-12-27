@@ -373,3 +373,17 @@ function turnOn() {
       }
     });
 }
+
+
+//GOOGLE MAP
+let map;
+
+function initMap() {
+  map = new google.maps.Map(document.getElementById("map"), {
+    mapId: "c00655e134f4c556",
+    center: { lat: 50.061389, lng: 19.937222 },
+    zoom: 14,
+    zoomControl: false,
+    disableDefaultUI: true,
+  });
+}

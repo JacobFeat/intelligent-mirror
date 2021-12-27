@@ -6,7 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Intelligent Mirror</title>
 
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/map.css">
+
+    <!-- for Google Maps -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -63,12 +68,13 @@
           <p class="text"></p>
         </div>
       </div>
+      <div id="map"></div>
     </section>
 
     <script src="textsSpeech.js"></script>
     <script src="calendar.js"></script>
-    <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.6.0/annyang.min.js"></script> -->
     <script src="index.js"></script>
+    <!-- for Google Calendar -->
     <script
       async
       defer
@@ -76,5 +82,10 @@
       onload="this.onload=function(){};handleClientLoad()"
       onreadystatechange="if (this.readyState === 'complete') this.onload()"
       ></script>
+      <!-- for Google Maps -->
+      <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQlQF_o9kd45z-ylZgpAdZI5IeFcb1D3A&callback=initMap&v=weekly"
+      async
+    ></script>
     </body>
 </html>
