@@ -376,14 +376,79 @@ function turnOn() {
 
 
 //GOOGLE MAP
+const libiaz = {
+  lat: 50.104,
+  lng: 19.316
+};
+
+const czyzynska = {
+  lat: 50.070310,
+  lng: 19.983940
+};
+
+const pk = {
+  lat: 50.071000,
+  lng: 19.944020
+};
+
+const krakow = {
+  lat: 50.049683,
+  lng: 19.944544
+}
+
 let map;
 
 function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
-    mapId: "c00655e134f4c556",
+    // mapId: "c00655e134f4c556",
+    mapId: "52abc03a2de896b5",
+    // mapId: "b15f175e57145442",
     center: { lat: 50.061389, lng: 19.937222 },
     zoom: 14,
     zoomControl: false,
     disableDefaultUI: true,
   });
+
+    //declare a object that we use get a result for our request
+    const directionsService = new google.maps.DirectionsService();
+    //declare a object that allow us to display route on the map
+    const directionsRenderer = new google.maps.DirectionsRenderer();
+    directionsRenderer.setMap(map);
+
+    //PLACES API
+    var request = {
+      query: 'Warszawa',
+      fields: ['name', 'geometry'],
+    };
+    const service = new google.maps.places.PlacesService(map);
+
+    service.findPlaceFromQuery(request, function(results, status) {
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+        // const originPlace = results[0]
+        console.log(results[0].geometry.location.lat());
+      }
+    });
+
+    calcRoute(directionsService, directionsRenderer, czyzynska, pk, "DRIVING");
+
 }
+
+
+function calcRoute(directionsService, directionsRenderer, originPlace, destinationPlace, travelMode) {
+  const request = {
+    origin: originPlace,
+    destination: destinationPlace,
+    travelMode: travelMode,
+  };
+  directionsService.route(request, (result, status) => {
+    if (status == 'OK') {
+      directionsRenderer.setDirections(result);
+      // const distanceField = document.querySelector('.distance-display');
+      // const timeField = document.querySelector('.time-display');
+      // distanceField.innerHTML = `Odległość: ${result.routes[0].legs[0].distance.text}`;
+      // timeField.innerHTML = `Czas: ${result.routes[0].legs[0].duration.text}`;
+      // distanceField.classList.toggle('distance-display-active');
+    }
+  });
+}
+
