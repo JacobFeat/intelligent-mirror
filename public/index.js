@@ -12,9 +12,9 @@ const text = document.querySelector(".text");
 let p = document.createElement("p");
 
 const newsTargetWords = {
-  return: {
+  back: {
     words: ["wróć", 'powrót'],
-    fnc: toggleNews
+    fnc: () => addNews(dataArr),
   },
   news: {
     words: ["wiadomości", "news"],
@@ -45,23 +45,23 @@ const newsTargetWords = {
     fnc: () => fetchNews(rss.rssBBCSport),
   },
   firstNews: {
-    words: ['pierwsza wiadomość', 'pierwsza', 'pierwszą', 'first'],
+    words: ['pierwsza wiadomość', 'pierwszą','pierwsz', 'first'],
     fnc: () => showCertainNews(0),
   },  
   secondNews: {
-    words: ['druga wiadomość', 'druga', 'drugą', 'second'],
+    words: ['druga wiadomość', 'druga', 'drugą', 'drugie', 'second'],
     fnc: () => showCertainNews(1),
   },  
   thirdNews: {
-    words: ['trzecia wiadomość', 'trzecia', 'trzecią', 'third'],
+    words: ['trzecia wiadomość', 'trzecia', 'trzecią', 'trzecie', 'third'],
     fnc: () => showCertainNews(2),
   },  
   fourthNews: {
-    words: ['czwarta wiadomość', 'czwarta', 'czwartą', 'fourth'],
+    words: ['czwarta wiadomość', 'czwarta', 'czwartą', 'czwarte', 'fourth',],
     fnc: () => showCertainNews(3),
   },  
   fifthNews: {
-    words: ['piąta wiadomość', 'piąta', 'piątą', 'fifth'],
+    words: ['piąta wiadomość', 'piąta', 'piątą', 'piąte', 'fifth'],
     fnc: () => showCertainNews(4),
   },
   weatherInside: {
@@ -77,7 +77,7 @@ const newsTargetWords = {
     fnc: () => justRead("Na zewnątrz czy w domu?")
   },
   pressure: {
-    words: ['ciśnienie'],
+    words: ['ciśnieni'],
     fnc: () => readWeather(pressure)
   },
   whoIsThePrettiest: {
@@ -118,7 +118,13 @@ recognition.addEventListener("result", (e) => {
   prevWord = htmlText;
 });
 
+
 recognition.addEventListener("end", (e) => {
+  
+  // console.log(`previous: ${prevWord}`);
+  // if(prevWord.toLowerCase() === 'sport'){
+    // recognition.stop();
+  // }
   recognition.start();
 });
 
@@ -244,6 +250,7 @@ function showCertainNews(n) {
 }
 
 function fetchNews(url) {
+  speechSynthesis.cancel();
   fetch(url)
     .then((res) => res.text())
     .then((str) => new window.DOMParser().parseFromString(str, "text/html"))
@@ -264,7 +271,6 @@ function fetchNews(url) {
         };
       });
       addNews(dataArr);
-      speechSynthesis.cancel();
     });
 }
 
@@ -282,21 +288,19 @@ function addNews(arr, amount = 5) {
     `;
   }
   htmlNewsList.innerHTML = html;
-  htmlNewsList.addEventListener("click", toggleNews);
+  speechSynthesis.cancel();
 }
 
-function toggleNews(e) {
+// function toggleNews(e) {
   // if (e.target.parentElement.classList.contains("news-item")) {
   //   htmlNewsList.innerHTML = e.target.parentElement.children[1].innerText;
   //   justRead(htmlNewsList.innerHTML);
   //   isExpanded = true;
   // }
-
   // if (isExpanded && e.target.classList.contains("news-list")) {
-    addNews(dataArr);
-    speechSynthesis.cancel();
+    // addNews(dataArr);
   // }
-}
+// }
 
 function setDate() {
   let date = new Date();
