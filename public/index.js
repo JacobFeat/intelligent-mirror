@@ -152,7 +152,7 @@ const rss = {
   rssBBCSport: "https://www.polsatnews.pl/rss/sport.xml",
 };
 // const rss = {
-//   rssBBCBusiness: "http://feeds.bbci.co.uk/news/business/rss.xml",
+  // rssBBCBusiness: "http://feeds.bbci.co.uk/news/business/rss.xml",
 //   rssBBCWorld: "http://feeds.bbci.co.uk/news/world/rss.xml",
 //   rssBBCPolitics: "http://feeds.bbci.co.uk/news/politics/rss.xml",
 //   rssBBCHealth: "http://feeds.bbci.co.uk/news/health/rss.xml",
@@ -179,14 +179,15 @@ let degreeInside = document.querySelectorAll(".degree")[1];
 let pressure = document.querySelector(".pressure");
 
 function readCalendarEvents() {
-  msg.text = '';
-  speechSynthesis.cancel();
-  const events = document.querySelectorAll(".event-container");
-  events.forEach((event) => {
-    msg.text += `${event.childNodes[0].textContent} ${event.childNodes[1].textContent},\n`;
-  });
-  speechSynthesis.speak(msg);
-  console.log(msg.text);
+  // msg.text = '';
+  // speechSynthesis.cancel();
+  // const events = document.querySelectorAll(".event-container");
+  // events.forEach((event) => {
+  //   msg.text += `${event.childNodes[0].textContent} ${event.childNodes[1].textContent},\n`;
+  // });
+  // speechSynthesis.speak(msg);
+  // console.log(msg.text);
+  
 }
 
 function newsChooser() {
