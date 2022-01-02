@@ -6,28 +6,32 @@ const say = require('say')
 
 // or, override the platform
 // const Say = require('say').Say
-// const say = new Say('darwin' || 'win32' || 'linux')
-
-say.speak('co tam u was?');
+// const say = new Say('darwin' || 'win32' || 'linux')  
 
 const app = express();
 
-app.use(express.static("public"));//display css and js
-app.use(bodyParser.urlencoded({extended: true}));
+//display css and js
+app.use(express.static("public"));
+app.use(express.json());
 
 
 app.get("/", function(req, res){
     res.sendFile(__dirname + "/index.html");
   });
 
-app.get('/sample-api', (req, res) => {
-    // // res.json({a: 1});
-    // res.header("Content-Type",'application/json');
-    // res.sendFile(path.join(__dirname, 'Temperatura.json'));
+
+app.post('/postVoice', (req, res) => {
+  const data = req.body;
+  // const voices = say.getInstalledVoices();
+  // say.getInstalledVoices((err, voices) => console.log(voices))
+  say.speak(data.read, 'Microsoft David Desktop');
+  res.json({
+    status: 'success',
+  })
 });
 
-app.listen(process.env.PORT || 8000, function(){
-    console.log(`Server started on port `);
+app.listen(8000, function(){
+    console.log(`Server started on port`);
   });
  
   

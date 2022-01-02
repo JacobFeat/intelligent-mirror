@@ -6,4 +6,22 @@
     width: 600px;
     height: 300px;
     background-color: red;
+    opacity: 0;
+}
+
+.map-active{
+    opacity: 1 !important;
+    transition: 0.3s ease;
+}
+
+.gmnoprint{
+    display: none;
+}
+
+.gm-style-cc{
+    display: none;
+}
+
+a[title]{
+    display: none !important;
 }

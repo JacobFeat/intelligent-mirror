@@ -136,42 +136,46 @@ function listUpcomingEvents() {
           let eventDay = Number(slicedWhen.slice(8,10));
           let eventMonth = Number(slicedWhen.slice(5,7));
           let eventYear = Number(slicedWhen.slice(0,4));
+          let monthDiff = eventMonth - monthNumber;
 
           let daysToOccur = ''
           if(eventYear > year){
             const monthToEnd = 12 - monthNumber;
-            const monthDiff = monthToEnd + eventMonth;
+            monthDiff = monthToEnd + eventMonth;
+            // if(monthDiff < 1){
+            //   daysToOccur = `za ${31 - day + eventDay} dni`;
+            // } 
+            // else {
+            //   daysToOccur = `za ${monthDiff} miesiące`;
+            // }  
             if(monthDiff < 2){
-              daysToOccur = `za ${31 - day + eventDay} dni`;
+              daysToOccur = `in ${31 - day + eventDay} days`;
             } else {
-              daysToOccur = `za ${monthDiff} miesiące`;
-            }  
-            //           if(monthDiff < 2){
-            //   daysToOccur = `in ${31 - day + eventDay} days`;
-            // } else {
-            //   daysToOccur = `in ${monthDiff} months`;
-            // }
-          }
-          else if(eventMonth > monthNumber){
-            daysToOccur = `za ${monthDiff} miesiące`;
-          }          
-          // else if(eventMonth > monthNumber){
-          //   daysToOccur = `in ${monthDiff} months`;
-          // }
-          else{
-            if(eventDay - day === 1){
-              daysToOccur = 'Jutro'
-            } else {
-              daysToOccur = `za ${eventDay - day} dni`;
+              daysToOccur = `in ${monthDiff} months`;
             }
-          }          
+          }
+          // else if(eventMonth > monthNumber){
+          //   daysToOccur = `za ${monthDiff} miesiące`;
+          //   console.log('tests');
+
+          // }          
+          else if(eventMonth > monthNumber){
+            daysToOccur = `in ${monthDiff} months`;
+          }
           // else{
           //   if(eventDay - day === 1){
-          //     daysToOccur = 'Tomorrow'
+          //     daysToOccur = 'Jutro'
           //   } else {
-          //     daysToOccur = `in ${eventDay - day} days`;
+          //     daysToOccur = `za ${eventDay - day} dni`;
           //   }
-          // }
+          // }          
+          else{
+            if(eventDay - day === 1){
+              daysToOccur = 'Tomorrow'
+            } else {
+              daysToOccur = `in ${eventDay - day} days`;
+            }
+          }
 
           if (!when) {
             when = event.start.date;
