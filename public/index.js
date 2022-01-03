@@ -1,4 +1,4 @@
-// voice recognition --------------------
+let mapFncActive = false;
 
 const texts = document.querySelector(".voice__container--texts");
 
@@ -6,7 +6,7 @@ window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecogn
 
 const recognition = new window.SpeechRecognition();
 recognition.interimResults = true;
-// recognition.lang = "en-US";
+recognition.lang = "en-US";
 const text = document.querySelector(".text");
 let p = document.createElement("p");
 
@@ -28,8 +28,8 @@ const newsTargetWords = {
     fnc: () => fetchNews(rss.rssBBCWorld),
   },
   politics: {
-    words: ['polityka', 'politic'],
-    fnc: () => fetchNews(rss.rssBBCPolitics)
+    words: ["polityka", "politic"],
+    fnc: () => fetchNews(rss.rssBBCPolitics),
   },
   // poland: {
   //   words: ["polska", "poland", "Polska", "Poland"],
@@ -48,27 +48,27 @@ const newsTargetWords = {
     fnc: () => fetchNews(rss.rssBBCSport),
   },
   health: {
-    words: ['zdrowi', 'health'],
-    fnc: () => fetchNews(rss.rssBBCHealth)
+    words: ["zdrowi", "health"],
+    fnc: () => fetchNews(rss.rssBBCHealth),
   },
   firstNews: {
-    words: ["pierwsza wiadomość", "pierwszą", "pierwsz", "first", 'one'],
+    words: ["pierwsza wiadomość", "pierwszą", "pierwsz", "first", "one"],
     fnc: () => showCertainNews(0),
   },
   secondNews: {
-    words: ["druga wiadomość", "druga", "drugą", "drugie", "second", 'two'],
+    words: ["druga wiadomość", "druga", "drugą", "drugie", "second", "two"],
     fnc: () => showCertainNews(1),
   },
   thirdNews: {
-    words: ["trzecia wiadomość", "trzecia", "trzecią", "trzecie", "third", 'three'],
+    words: ["trzecia wiadomość", "trzecia", "trzecią", "trzecie", "third", "three"],
     fnc: () => showCertainNews(2),
   },
   fourthNews: {
-    words: ["czwarta wiadomość", "czwarta", "czwartą", "czwarte", "fourth", 'four'],
+    words: ["czwarta wiadomość", "czwarta", "czwartą", "czwarte", "fourth", "four"],
     fnc: () => showCertainNews(3),
   },
   fifthNews: {
-    words: ["piąta wiadomość", "piąta", "piątą", "piąte", "fifth", 'five'],
+    words: ["piąta wiadomość", "piąta", "piątą", "piąte", "fifth", "five"],
     fnc: () => showCertainNews(4),
   },
   weatherInside: {
@@ -84,6 +84,8 @@ const newsTargetWords = {
       "na polu",
       "na zewnątrz",
       "pogoda",
+      "weather",
+      "temperature outside",
     ],
     fnc: () => readWeather(degreeOutside),
   },
@@ -92,7 +94,7 @@ const newsTargetWords = {
   //   fnc: () => justRead("Na zewnątrz czy w domu?")
   // },
   pressure: {
-    words: ["ciśnieni"],
+    words: ["ciśnieni", 'pressure'],
     fnc: () => readWeather(pressure),
   },
   calendar: {
@@ -104,7 +106,7 @@ const newsTargetWords = {
     fnc: () => readFromServer(hourMinutesWrapper.textContent),
   },
   maps: {
-    words: ["mapa", "map", "maps", "droga", 'navigat'],
+    words: ["mapa", "map", "maps", "droga"],
     fnc: () => chooseDestination(),
   },
 };
@@ -121,29 +123,60 @@ recognition.addEventListener("result", (e) => {
   p.innerText = htmlText;
   texts.appendChild(p);
 
-  for (let category in newsTargetWords) {
-    newsTargetWords[category].words.forEach((word) => {
-      if (htmlText.toLowerCase().includes(word)) {
-        newsTargetWords[category].fnc();
-      }
-    });
+  // if (prevWord === "navigate to") {
+  //   readFromServer("Where?");
+  //   recognition.lang = "pl-PL";
+  //   console.log(htmlText);
+  //   initMap(htmlText);
+  //   const mapContainer = document.querySelector("#map");
+  //   mapContainer.classList.add("map-active");
+  // }
+
+  if(mapFncActive){
+    console.log(htmlText);
+    initMap(htmlText);
+    const mapContainer = document.querySelector("#map");
+    mapContainer.classList.add("map-active");
+    mapFncActive = false;
+  } else{
+    recognition.lang = "en-US";
+    for (let category in newsTargetWords) {
+      newsTargetWords[category].words.forEach((word) => {
+        if (htmlText.toLowerCase().includes(word)) {
+          newsTargetWords[category].fnc();
+        }
+      });
+    }
   }
+  
+
+  console.log(mapFncActive);
   prevWord = htmlText;
 });
 
-recognition.addEventListener("end", (e) => {
-  if (prevWord.toLowerCase().includes("trasa")) {
-    console.log(prevWord);
-    const destinationAddress = prevWord.slice(9);
-    initMap(destinationAddress);
-    const mapContainer = document.querySelector("#map");
-    mapContainer.classList.add("map-active");
-  }
+recognition.addEventListener("end", continueSpeak);
+// if (prevWord.toLowerCase().includes("trasa")) {
+//   console.log(prevWord);
+//   const destinationAddress = prevWord.slice(9);
+//   initMap(destinationAddress);
+//   const mapContainer = document.querySelector("#map");
+//   mapContainer.classList.add("map-active");
+// }
+
+function continueSpeak(){
   recognition.start();
-});
+}
 
 function chooseDestination(destination) {
-  readFromServer("Say: route to....");
+  recognition.lang = "pl-PL";
+  // recognition.removeEventListener("end", continueSpeak);
+  recognition.stop();
+  mapFncActive = true;
+  readFromServer("Where would you like to go?");
+  setTimeout(() => {
+    recognition.start();
+    // recognition.addEventListener("end", continueSpeak);
+  }, 2000);
 }
 
 recognition.start();
@@ -202,6 +235,7 @@ function readCalendarEvents() {
     text += `${event.childNodes[0].textContent} ${event.childNodes[1].textContent},\n`;
   });
   readFromServer(text);
+  mapFncActive = false;
 }
 
 function readFromServer(text) {
@@ -222,6 +256,7 @@ function readFromServer(text) {
 }
 
 function newsChooser() {
+  mapFncActive = false;
   let text = "";
   text = `What kind of news do you want to listen to?`;
   // msg.text = "Jaką kategorię wiadomości chcesz usłyszeć?";
@@ -241,6 +276,7 @@ function newsChooser() {
 }
 
 function readWeather(degree) {
+  mapFncActive = false;
   if (degree === degreeInside) {
     readFromServer(`There is ${degree.innerText} in your room.`);
     // msg.text = `There are ${degree.innerText} in your room.`;
@@ -254,6 +290,7 @@ function readWeather(degree) {
 }
 
 function showCertainNews(n) {
+  mapFncActive = false;
   if (htmlNewsList.childElementCount) {
     htmlNewsList.innerHTML = dataArr[n].description;
     readFromServer(dataArr[n].description);
@@ -261,6 +298,7 @@ function showCertainNews(n) {
 }
 
 function fetchNews(url) {
+  mapFncActive = false;
   speechSynthesis.cancel();
   fetch(url)
     .then((res) => res.text())
@@ -286,6 +324,7 @@ const htmlNewsList = document.querySelector(".news-list");
 let isExpanded = false;
 
 function addNews(arr, amount = 5) {
+  mapFncActive = false;
   let html = ``;
   for (let i = 0; i < amount; i++) {
     html += `
