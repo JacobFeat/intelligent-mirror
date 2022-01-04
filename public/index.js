@@ -109,7 +109,13 @@ const newsTargetWords = {
     words: ["mapa", "map", "maps", "droga"],
     fnc: () => chooseDestination(),
   },
+  hideMap: {
+    words: ['schowaj map', 'hide map'],
+    fnc: () => hideMap(),
+  }
 };
+
+const mapContainer = document.querySelector("#map");
 
 let prevWord = "";
 recognition.addEventListener("result", (e) => {
@@ -131,13 +137,17 @@ recognition.addEventListener("result", (e) => {
   //   const mapContainer = document.querySelector("#map");
   //   mapContainer.classList.add("map-active");
   // }
+  if(htmlText === 'a'){
+    mapFncActive = false;
+  }
 
   if(mapFncActive){
     console.log(htmlText);
     initMap(htmlText);
-    const mapContainer = document.querySelector("#map");
     mapContainer.classList.add("map-active");
-    mapFncActive = false;
+    // setTimeout(() => {
+    //   mapFncActive = false;
+    // }, 3000)
   } else{
     recognition.lang = "en-US";
     for (let category in newsTargetWords) {
@@ -164,19 +174,31 @@ recognition.addEventListener("end", continueSpeak);
 // }
 
 function continueSpeak(){
-  recognition.start();
+  for (let category in newsTargetWords) {
+    newsTargetWords[category].words.forEach((word) => {
+      if (prevWord.toLowerCase().includes(word)) {
+        // recognition.stop();
+      }
+    });
+  }
+  // recognition.start();
 }
 
 function chooseDestination(destination) {
   recognition.lang = "pl-PL";
   // recognition.removeEventListener("end", continueSpeak);
-  recognition.stop();
   mapFncActive = true;
   readFromServer("Where would you like to go?");
-  setTimeout(() => {
-    recognition.start();
-    // recognition.addEventListener("end", continueSpeak);
-  }, 2000);
+  // recognition.stop();
+  // setTimeout(() => {
+  //   recognition.start();
+  //   // recognition.addEventListener("end", continueSpeak);
+  //   // recognition.continuous = true;
+  // }, 3000);
+}
+
+function hideMap(){
+  mapContainer.classList.remove("map-active");
 }
 
 recognition.start();
@@ -239,6 +261,7 @@ function readCalendarEvents() {
 }
 
 function readFromServer(text) {
+  recognition.stop();
   const str = { read: text };
 
   const headers = new Headers();
@@ -253,6 +276,7 @@ function readFromServer(text) {
   })
     .then((res) => res.json())
     .catch((err) => console.error(`Error: ${err}`));
+
 }
 
 function newsChooser() {
