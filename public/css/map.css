@@ -1,17 +1,18 @@
 #map{
-    position: absolute;
-    /* top: 60%; */
-    bottom: 0;
-    right: 0;
     width: 600px;
     height: 300px;
     background-color: red;
-    opacity: 0;
 }
 
-.map-active{
-    opacity: 1 !important;
-    transition: 0.3s ease;
+.map__box{
+    display: flex;
+}
+
+.map__box{
+    font-size: 20px;
+    padding-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
 }
 
 .gmnoprint{

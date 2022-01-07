@@ -7,11 +7,10 @@
     <title>Intelligent Mirror</title>
 
     <link rel="stylesheet" href="css/styles.css" />
-    <link rel="stylesheet" href="css/map.css">
+    <link rel="stylesheet" href="css/map.css" />
 
     <!-- for Google Maps -->
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -28,47 +27,47 @@
           <div class="hour-minutes"></div>
           <div class="seconds"></div>
         </div>
+        <div class="calendar">
+          <button id="authorize_button" style="display: block">Authorize</button>
+          <button id="signout_button" style="display: none">Sign Out</button>
+
+          <h2 class="calendar__title">CALENDAR</h2>
+          <pre id="content" style="white-space: pre-wrap"></pre>
+        </div>
         <div class="news-container">
-        <ul class="news-list"></ul>
-      </div>
+          <ul class="news-list"></ul>
+        </div>
       </div>
       <div class="right-wrapper">
-        <p class="city-name"></p>
-        <div class="weather-wrapper">
-          <div class="out-weather box-weather">
-            <img
-              src="https://openweathermap.org/img/wn/04d@2x.png"
-              alt=""
-              class="weather-icon"
-            />
-            <div class="degree"></div>
+        <div class="right-top">
+          <p class="city-name"></p>
+          <div class="weather-wrapper">
+            <div class="out-weather box-weather">
+              <img src="https://openweathermap.org/img/wn/04d@2x.png" alt="" class="weather-icon" />
+              <div class="degree"></div>
+            </div>
+            <div class="in-weather box-weather">
+              <img src="images/icons/cottage_white_24dp.svg" alt="" class="home-img" />
+              <div class="degree"></div>
+            </div>
           </div>
-          <div class="in-weather box-weather">
-            <img
-              src="images/icons/cottage_white_24dp.svg"
-              alt=""
-              class="home-img"
-            />
-            <div class="degree"></div>
-          </div>
+          <p class="pressure"></p>
         </div>
-        <p class="pressure"></p>
-        <!-- <button class="click-me-btn"">Click me</button> -->
-      </div>
-      <!--Add buttons to initiate auth sequence and sign out-->
-      <div class="calendar">
-        <button id="authorize_button" style="display: block;">Authorize</button>
-        <button id="signout_button" style="display: none;" >Sign Out</button>
 
-        <h2 class="calendar__title">CALENDAR</h2>
-        <pre id="content" style="white-space: pre-wrap"></pre>
+        <div class="right-down">
+          <div class="map__box">
+            <div class="map__time"></div>
+            <div class="map__distance"></div>
+          </div>
+          <div id="map"></div>
+        </div>
       </div>
+
       <div class="voice__container">
         <div class="voice__container--texts">
           <p class="text"></p>
         </div>
       </div>
-      <div id="map"></div>
     </section>
 
     <script src="calendar.js"></script>
@@ -80,11 +79,11 @@
       src="https://apis.google.com/js/api.js"
       onload="this.onload=function(){};handleClientLoad()"
       onreadystatechange="if (this.readyState === 'complete') this.onload()"
-      ></script>
-      <!-- for Google Maps -->
-      <script
+    ></script>
+    <!-- for Google Maps -->
+    <script
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQlQF_o9kd45z-ylZgpAdZI5IeFcb1D3A&libraries=places&callback=initMap&v=weekly"
       async
     ></script>
-    </body>
+  </body>
 </html>

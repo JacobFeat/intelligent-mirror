@@ -12,23 +12,23 @@ let p = document.createElement("p");
 
 const newsTargetWords = {
   back: {
-    words: ["wróć", "powrót", "back", "return"],
+    words: ["okej wróć", "okej powrót", "okay back", "okay return"],
     fnc: () => addNews(dataArr),
   },
   news: {
-    words: ["wiadomości", "news"],
+    words: ["okej wiadomości", "okay news"],
     fnc: newsChooser,
   },
   business: {
-    words: ["biznes", "business"],
+    words: ["okej biznes", "okay business"],
     fnc: () => fetchNews(rss.rssBBCBusiness),
   },
   world: {
-    words: ["świat", "world"],
+    words: ["okej świat", "okay world"],
     fnc: () => fetchNews(rss.rssBBCWorld),
   },
   politics: {
-    words: ["polityka", "politic"],
+    words: ["okej polityka", "okay politic"],
     fnc: () => fetchNews(rss.rssBBCPolitics),
   },
   // poland: {
@@ -36,7 +36,7 @@ const newsTargetWords = {
   //   fnc: () => fetchNews(rss.rssBBCPolska),
   // },
   tech: {
-    words: ["technolog", "technology", "tech"],
+    words: ["okej technolog", "okay technolog", "okay tech"],
     fnc: () => fetchNews(rss.rssBBCTechnology),
   },
   // culture: {
@@ -44,78 +44,79 @@ const newsTargetWords = {
   //   fnc: () => fetchNews(rss.rssBBC),
   // },
   sport: {
-    words: ["sport", "sporty", "sports"],
+    words: ["okej sport", "okay sport", "okay sports"],
     fnc: () => fetchNews(rss.rssBBCSport),
   },
   health: {
-    words: ["zdrowi", "health"],
+    words: ["okej zdrowi", "okay health"],
     fnc: () => fetchNews(rss.rssBBCHealth),
   },
   firstNews: {
-    words: ["pierwsza wiadomość", "pierwszą", "pierwsz", "first", "one"],
+    words: ["okej pierwsza wiadomość", "okej pierwszą", "okej pierwsz", "okay first", "okay one"],
     fnc: () => showCertainNews(0),
   },
   secondNews: {
-    words: ["druga wiadomość", "druga", "drugą", "drugie", "second", "two"],
+    words: ["okej druga wiadomość", "okej druga", "okej drugą", "okej drugie", "okay second", "okay two"],
     fnc: () => showCertainNews(1),
   },
   thirdNews: {
-    words: ["trzecia wiadomość", "trzecia", "trzecią", "trzecie", "third", "three"],
+    words: ["okej trzecia wiadomość", "okej trzecia", "okej trzecią", "okej trzecie", "okay third", "okay three"],
     fnc: () => showCertainNews(2),
   },
   fourthNews: {
-    words: ["czwarta wiadomość", "czwarta", "czwartą", "czwarte", "fourth", "four"],
+    words: ["okej czwarta wiadomość", "okej czwarta", "okej czwartą", "okej czwarte", "okay fourth", "okay four"],
     fnc: () => showCertainNews(3),
   },
   fifthNews: {
-    words: ["piąta wiadomość", "piąta", "piątą", "piąte", "fifth", "five"],
+    words: ["okej piąta wiadomość", "okej piąta", "okej piątą", "okej piąte", "okay fifth", "okay five"],
     fnc: () => showCertainNews(4),
   },
   weatherInside: {
-    words: ["w domu", "w środku", "w pokoju", "w mieszkaniu", "inside", "room"],
+    words: ["okej w domu", "okej w środku", "okej w pokoju", "okej w mieszkaniu", "ok temperature inside", "okay temperature in the room", 'okay inside'],
     fnc: () => readWeather(degreeInside),
   },
   weatherOutside: {
     words: [
-      "temperatura na polu",
-      "temperatura na zewnątrz",
-      "ile jest stopni na polu",
-      "ile jest stopni na zewnątrz",
-      "na polu",
-      "na zewnątrz",
-      "pogoda",
-      "weather",
-      "temperature outside",
+      "okej temperatura na polu",
+      "okej temperatura na zewnątrz",
+      "okej ile jest stopni na polu",
+      "okej ile jest stopni na zewnątrz",
+      "okej na polu",
+      "okej na zewnątrz",
+      "okej pogoda",
+      "okay weather",
+      "okay temperature outside",
+      "okay outside"
     ],
     fnc: () => readWeather(degreeOutside),
   },
-  // weatherChoice: {
-  //   words: ['ile jest stopni', 'jaka jest temperatura', 'temperatura', 'stopni'],
-  //   fnc: () => justRead("Na zewnątrz czy w domu?")
-  // },
+  weatherChoice: {
+    words: ['okej ile jest stopni', 'okej jaka jest temperatura', 'okay temperature', 'okay degree'],
+    fnc: () => readFromServer("Outside or inside?")
+  },
   pressure: {
-    words: ["ciśnieni", 'pressure'],
+    words: ["okej ciśnieni", "okay pressure"],
     fnc: () => readWeather(pressure),
   },
   calendar: {
-    words: ["kalendarz", "wydarzenia", "zaplanowane", "events", "calendar"],
+    words: ["okej kalendarz", "okej wydarzenia", "okej zaplanowane", "okay events", "okay calendar"],
     fnc: readCalendarEvents,
   },
   time: {
-    words: ["godzina", "time"],
+    words: ["okej godzina", "okay time"],
     fnc: () => readFromServer(hourMinutesWrapper.textContent),
   },
   maps: {
-    words: ["mapa", "map", "maps", "droga"],
+    words: ["okej mapa", "okay navigation", "maps"],
     fnc: () => chooseDestination(),
   },
   hideMap: {
-    words: ['schowaj map', 'hide map'],
+    words: ["okej schowaj map", "okay hide navigation"],
     fnc: () => hideMap(),
-  }
+  },
 };
 
-const mapContainer = document.querySelector("#map");
+const mapContainer = document.querySelector(".right-down");
 
 let prevWord = "";
 recognition.addEventListener("result", (e) => {
@@ -126,7 +127,6 @@ recognition.addEventListener("result", (e) => {
   //protect from duplicate
   if (prevWord === htmlText) return;
 
-  p.innerText = htmlText;
   texts.appendChild(p);
 
   // if (prevWord === "navigate to") {
@@ -137,18 +137,19 @@ recognition.addEventListener("result", (e) => {
   //   const mapContainer = document.querySelector("#map");
   //   mapContainer.classList.add("map-active");
   // }
-  if(htmlText === 'a'){
+  if (htmlText === "a") {
     mapFncActive = false;
   }
 
-  if(mapFncActive){
+  if (mapFncActive) {
     console.log(htmlText);
     initMap(htmlText);
-    mapContainer.classList.add("map-active");
-    // setTimeout(() => {
-    //   mapFncActive = false;
-    // }, 3000)
-  } else{
+    setTimeout(() => {
+      mapContainer.classList.add("opacity-on");
+      // mapFncActive = false;
+    }, 5000)
+  } else {
+    p.innerText = htmlText;
     recognition.lang = "en-US";
     for (let category in newsTargetWords) {
       newsTargetWords[category].words.forEach((word) => {
@@ -158,7 +159,6 @@ recognition.addEventListener("result", (e) => {
       });
     }
   }
-  
 
   console.log(mapFncActive);
   prevWord = htmlText;
@@ -173,7 +173,7 @@ recognition.addEventListener("end", continueSpeak);
 //   mapContainer.classList.add("map-active");
 // }
 
-function continueSpeak(){
+function continueSpeak() {
   for (let category in newsTargetWords) {
     newsTargetWords[category].words.forEach((word) => {
       if (prevWord.toLowerCase().includes(word)) {
@@ -181,7 +181,7 @@ function continueSpeak(){
       }
     });
   }
-  // recognition.start();
+  recognition.start();
 }
 
 function chooseDestination(destination) {
@@ -197,8 +197,8 @@ function chooseDestination(destination) {
   // }, 3000);
 }
 
-function hideMap(){
-  mapContainer.classList.remove("map-active");
+function hideMap() {
+  mapContainer.classList.remove("opacity-on");
 }
 
 recognition.start();
@@ -276,7 +276,6 @@ function readFromServer(text) {
   })
     .then((res) => res.json())
     .catch((err) => console.error(`Error: ${err}`));
-
 }
 
 function newsChooser() {
@@ -514,11 +513,12 @@ function calcRoute(directionsService, directionsRenderer, originPlace, destinati
   directionsService.route(request, (result, status) => {
     if (status == "OK") {
       directionsRenderer.setDirections(result);
-      // const distanceField = document.querySelector('.distance-display');
-      // const timeField = document.querySelector('.time-display');
-      // distanceField.innerHTML = `Odległość: ${result.routes[0].legs[0].distance.text}`;
-      // timeField.innerHTML = `Czas: ${result.routes[0].legs[0].duration.text}`;
+      const distanceField = document.querySelector('.map__distance');
+      const timeField = document.querySelector('.map__time');
+      timeField.innerHTML = `Time: ${result.routes[0].legs[0].duration.text}`;
+      distanceField.innerHTML = `Distance: ${result.routes[0].legs[0].distance.text}`;
       // distanceField.classList.toggle('distance-display-active');
     }
   });
 }
+

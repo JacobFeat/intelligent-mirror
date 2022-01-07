@@ -26,7 +26,7 @@ app.post('/postVoice', (req, res) => {
   // say.getInstalledVoices((err, voices) => console.log(voices))
   say.speak(data.read, 'Microsoft David Desktop');
   res.json({
-    status: 'success',
+    fnc: 'recognition.start()'
   })
 });
 
